@@ -1,0 +1,39 @@
+name: CI/CD - PortWatt SME Déploiement
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Demo Static App
+        run: npm run build
+        env:
+          VITE_DEMO_MODE: 'true'
+
+      - name: Prepare SPA 200.html Fallback
+        run: cp dist/index.html dist/200.html
+
+      - name: Deploy to Surge (Live Demo)
+        run: npx --yes surge ./dist https://portwatt-depa.surge.sh --token ${{ secrets.SURGE_TOKEN }}
+        if: env.SURGE_TOKEN != ''
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
