@@ -1,4 +1,4 @@
-import { Substation, Meter, Alert, EnPI, SERModel, PreventiveVisit, CorrectiveTicket, RecetteTest, VoltageSagEvent } from '../types';
+import { MeterStatus, PrecisionClass, Substation, Meter, Alert, EnPI, SERModel, PreventiveVisit, CorrectiveTicket, RecetteTest, VoltageSagEvent } from '../types';
 
 export const INITIAL_SUBSTATIONS: Substation[] = [
   {
@@ -123,7 +123,7 @@ export const INITIAL_METERS: Meter[] = [
       isExisting: true,
       isSubmetering: !isArrivee,
       calibrationDueDate: '2027-04-15',
-      status: idx === 5 ? 'WARNING' : 'ONLINE', // Scénario démo : meter 5 perte com simulée
+      status: (idx === 5 ? 'WARNING' : 'ONLINE') as MeterStatus, // Scénario démo : meter 5 perte com simulée
       lastCommunication: idx === 5 ? 'Il y a 14 min' : 'Il y a 2 sec',
       dataQualityCompleteness: idx === 5 ? 91.2 : 99.8,
     };
@@ -143,7 +143,7 @@ export const INITIAL_METERS: Meter[] = [
       substationId: 'sub-pt-y',
       feederCode: isArrivee ? `ARR-T${idx}` : `DEP-Y${idx - 2}`,
       usageCategory: (isArrivee ? 'TGBT_INCOMER' : (idx === 3 ? 'LIGHTING' : (idx === 4 ? 'BUILDING_HVAC' : 'CONTAINER_REEFER'))) as any,
-      precisionClass: (is05S ? '0.5S' : '0.2S') as const,
+      precisionClass: (is05S ? '0.5S' : '0.2S') as PrecisionClass,
       ipAddress: `192.168.20.${100 + idx}`,
       port: 502,
       unitId: 1,
@@ -173,7 +173,7 @@ export const INITIAL_METERS: Meter[] = [
       substationId: 'sub-pt-x',
       feederCode: isArrivee ? `ARR-T${idx}` : `DEP-X${idx - 2}`,
       usageCategory: (isArrivee ? 'TGBT_INCOMER' : (idx === 3 ? 'GENERATOR' : (idx === 4 ? 'WORKSHOP_PUMP' : 'CONTAINER_REEFER'))) as any,
-      precisionClass: (is05S ? '0.5S' : '0.2S') as const,
+      precisionClass: (is05S ? '0.5S' : '0.2S') as PrecisionClass,
       ipAddress: `192.168.30.${100 + idx}`,
       port: 502,
       unitId: 1,
@@ -203,7 +203,7 @@ export const INITIAL_METERS: Meter[] = [
       substationId: 'sub-pt-z',
       feederCode: isArrivee ? `ARR-T${idx}` : `DEP-Z${idx - 2}`,
       usageCategory: (isArrivee ? 'TGBT_INCOMER' : (idx === 3 ? 'LIGHTING' : (idx === 4 ? 'BUILDING_HVAC' : 'CONTAINER_REEFER'))) as any,
-      precisionClass: (is05S ? '0.5S' : '0.2S') as const,
+      precisionClass: (is05S ? '0.5S' : '0.2S') as PrecisionClass,
       ipAddress: `192.168.40.${100 + idx}`,
       port: 502,
       unitId: 1,
@@ -213,7 +213,7 @@ export const INITIAL_METERS: Meter[] = [
       isExisting: false,
       isSubmetering: !isArrivee,
       calibrationDueDate: '2028-10-15',
-      status: idx === 4 ? 'WARNING' : 'ONLINE', // Scénario démo : Cos phi bas sur Bât Capitainerie
+      status: (idx === 4 ? 'WARNING' : 'ONLINE') as MeterStatus, // Scénario démo : Cos phi bas sur Bât Capitainerie
       lastCommunication: 'Il y a 2 sec',
       dataQualityCompleteness: 99.6,
     };
@@ -233,7 +233,7 @@ export const INITIAL_METERS: Meter[] = [
       substationId: 'sub-pt-4',
       feederCode: isArrivee ? `ARR-T${idx}` : `DEP-4${idx - 2}`,
       usageCategory: (isArrivee ? 'TGBT_INCOMER' : (idx <= 4 ? 'QUAY_CRANE' : 'CONTAINER_REEFER')) as any,
-      precisionClass: (is05S ? '0.5S' : '0.2S') as const,
+      precisionClass: (is05S ? '0.5S' : '0.2S') as PrecisionClass,
       ipAddress: `192.168.50.${100 + idx}`,
       port: 502,
       unitId: 1,
@@ -263,7 +263,7 @@ export const INITIAL_METERS: Meter[] = [
       substationId: 'sub-pt-7',
       feederCode: isArrivee ? `ARR-T${idx}` : `DEP-7${idx - 2}`,
       usageCategory: (isArrivee ? 'TGBT_INCOMER' : (idx === 3 ? 'LIGHTING' : (idx === 4 ? 'WORKSHOP_PUMP' : 'CONTAINER_REEFER'))) as any,
-      precisionClass: (is05S ? '0.5S' : '0.2S') as const,
+      precisionClass: (is05S ? '0.5S' : '0.2S') as PrecisionClass,
       ipAddress: `192.168.60.${100 + idx}`,
       port: 502,
       unitId: 1,

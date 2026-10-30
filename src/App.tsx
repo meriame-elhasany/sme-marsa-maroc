@@ -34,14 +34,15 @@ export const App: React.FC = () => {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [guidedTourOpen, setGuidedTourOpen] = useState(false);
 
-  // Synchronisation avec l'historique de l'URL pour le routage propre (deep routes)
+  // Routage par hash (#/page) : fonctionne sur GitHub Pages, Vercel, Netlify sans règle de réécriture
   useEffect(() => {
-    const handlePopState = () => {
-      const path = window.location.pathname.replace('/', '') || 'overview';
-      setActivePage(path);
+    const readHash = () => {
+      const page = window.location.hash.replace(/^#\/?/, '') || 'overview';
+      setActivePage(page);
     };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    readHash();
+    window.addEventListener('hashchange', readHash);
+    return () => window.removeEventListener('hashchange', readHash);
   }, []);
 
   const navigateTo = (page: string, param?: string) => {
@@ -49,7 +50,7 @@ export const App: React.FC = () => {
     if (page === 'substations' && param) {
       setSelectedSubstationId(param);
     }
-    window.history.pushState({}, '', `/${page === 'overview' ? '' : page}`);
+    window.history.pushState({}, '', page === 'overview' ? '#/' : `#/${page}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

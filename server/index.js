@@ -4,7 +4,7 @@
  * Conforme ISO 50001:2018 - Mode On-Premise
  */
 
-const http = require('http');
+import http from 'node:http';
 
 const PORT = process.env.PORT || 4000;
 const MODBUS_MODE = process.env.MODBUS_MODE || 'simulated'; // 'real' ou 'simulated'

@@ -186,7 +186,7 @@ export class LocalDbService {
         const nextStatus = t.status === 'SUCCESS' ? 'PENDING' : 'SUCCESS';
         return {
           ...t,
-          status: nextStatus as const,
+          status: nextStatus as typeof t.status,
           executedBy: userName,
           executedAt: new Date().toISOString().substring(0, 10),
         };

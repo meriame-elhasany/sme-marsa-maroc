@@ -1,39 +1,43 @@
-name: CI/CD - PortWatt SME Déploiement
+name: Déploiement GitHub Pages - PortWatt SME
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Demo Static App
-        run: npm run build
+      - run: npm ci
+      - run: npm run build
         env:
           VITE_DEMO_MODE: 'true'
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
 
-      - name: Prepare SPA 200.html Fallback
-        run: cp dist/index.html dist/200.html
-
-      - name: Deploy to Surge (Live Demo)
-        run: npx --yes surge ./dist https://portwatt-depa.surge.sh --token ${{ secrets.SURGE_TOKEN }}
-        if: env.SURGE_TOKEN != ''
-        env:
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
